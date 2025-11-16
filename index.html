@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Putri Portfolio</title>
+  <link rel="shortcut icon" type="image/png" href="/assets/images/logos/ptr.svg" />
+  <style>
+    :root {
+      --bg-color: #0d0d0d;
+      --text-color: #121212;
+      --section-bg: #0d0d0d;
+      --section-text: white;
+      --border-color: #3f3f3f;
+      --button-bg: transparent;
+      --button-hover-bg: white;
+      --button-hover-color: black;
+      --icon-border: white;
+      --icon-hover-bg: white;
+      --icon-hover-color: black;
+    }
+    @font-face {
+  font-family: 'TT Firs Neue';
+  src: url('./fonts/TT Firs Neue Trial Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+    body.light-mode {
+      --bg-color: #f4f4f4;
+      --text-color: #000000;
+      --section-bg: #e0e0e0;
+      --section-text: #000000;
+      --border-color: #bbb;
+      --button-bg: transparent;
+      --button-hover-bg: #000000;
+      --button-hover-color: #ffffff;
+      --icon-border: #000000;
+      --icon-hover-bg: #000000;
+      --icon-hover-color: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'TT Firs Neue', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      overflow-x: hidden;
+      opacity: 0;
+      transition: opacity 1.2s ease-in-out;
+    }
+
+    body.fade-in {
+      opacity: 1;
+    }
+
+    .main-container {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-1 {
+      background: url('bg-ptrmlda.png') center/cover no-repeat;
+      height: 40vh;
+      display: flex;
+      align-items: stretch;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .section-2 {
+      height: 60vh;
+      display: flex;
+    }
+
+    .section-2-left {
+      width: 30%;
+      background: var(--section-bg);
+      color: var(--section-text);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+    }
+
+    .section-2-right {
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .right-section {
+      height: 33.333%;
+      background: var(--section-bg);
+      color: var(--section-text);
+      border-left: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 20px 20px 20px;
+    }
+
+    .right-section .section-content {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .right-section span {
+      font-size: 1.9rem;
+      font-weight: lighter;
+    }
+
+    .right-section-buttons {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .right-section-buttons a {
+      color: var(--section-text);
+      text-decoration: none;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      background: var(--button-bg);
+      transition: all 0.3s ease;
+    }
+
+    .right-section-buttons a:hover {
+      background: var(--button-hover-bg);
+      color: var(--button-hover-color);
+    }
+
+    .right-section-icons {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .right-section-icons a {
+      color: var(--section-text);
+      text-decoration: none;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--icon-border);
+      border-radius: 50%;
+    }
+
+    .right-section-icons a:hover {
+      background: var(--icon-hover-bg);
+      color: var(--icon-hover-color);
+      transform: scale(1.1);
+    }
+
+    #musicToggle, #themeToggle {
+      position: fixed;
+      bottom: 20px;
+      z-index: 1000;
+      background: #fff;
+      color: #121212;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #musicToggle { left: 20px; }
+    #themeToggle { left: 80px; }
+
+    #musicToggle.playing {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .audio-status {
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .audio-status.show {
+      opacity: 1;
+    }
+
+    /* MOBILE ONLY FIX */
+    @media (max-width: 768px) {
+      .section-2 {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .section-2-left,
+      .section-2-right {
+        width: 100%;
+      }
+
+      .section-2-left {
+        height: auto;
+        font-size: 2.2rem;
+        justify-content: center;
+        padding: 1.5rem 0;
+      }
+
+      .section-2-right {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .right-section {
+        width: 100%;
+        height: auto;
+        padding: 1.5rem 1rem;
+        text-align: center;
+        flex-direction: column;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .right-section .section-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .right-section span {
+        font-size: 1.5rem;
+      }
+
+      .right-section-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .right-section-buttons a {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+
+      .right-section-icons {
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .right-section-icons a {
+        width: 36px;
+        height: 36px;
+        font-size: 1.2rem;
+      }
+
+      .main-container {
+        padding-bottom: 120px; /* space for buttons */
+      }
+    }
+
+    #typewriter {
+  border-right: 2px solid var(--section-text);
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: inherit;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: var(--section-text); }
+}
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="section-1"></div>
+    <div class="section-2">
+      <div class="section-2-left clickable">
+        <div class="section-content">
+          <span id="typewriter">Aldnlee</span>
+        </div>
+      </div>
+      <div class="section-2-right">
+        <div class="right-section clickable">
+          <div class="section-content">
+            <span>Portfolio</span>
+            <div class="right-section-buttons">
+              <a href="/html/gd.html">2025 Portfolio ↗</a>
+              <a href="https://aldnlee.github.io/">2022 Portfolio ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="right-section clickable">
+          <div class="section-content">
+            <span>About Me</span>
+            <div class="right-section-buttons">
+              <a href="/html/about-us.html">Explore ↗</a>
+            </div>
+          </div>
+        </div>
+        <div class="right-section clickable">
+          <div class="section-content">
+            <span>Contact Me</span>
+            <div class="right-section-icons">
+              <a href="#">in</a>
+              <a href="#">gh</a>
+              <a href="#">ig</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="audioStatus" class="audio-status">Click to enable audio for better experience</div>
+  <button id="musicToggle" title="Toggle Music">🔇</button>
+  <button id="themeToggle" title="Toggle Theme">🌞</button>
+  <audio id="bgMusic" loop preload="auto">
+    <source src="tarot.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+  <script>
+    const audio = document.getElementById("bgMusic");
+    const toggleBtn = document.getElementById("musicToggle");
+    const audioStatus = document.getElementById("audioStatus");
+    let isPlaying = false;
+
+    setTimeout(() => {
+      audioStatus.classList.add('show');
+      setTimeout(() => audioStatus.classList.remove('show'), 8000);
+    }, 1000);
+
+    toggleBtn.addEventListener("click", async () => {
+      try {
+        if (isPlaying) {
+          audio.pause();
+          toggleBtn.textContent = "🔇";
+          toggleBtn.classList.remove('playing');
+          showStatus("Music paused");
+          isPlaying = false;
+        } else {
+          await audio.play();
+          toggleBtn.textContent = "🔊";
+          toggleBtn.classList.add('playing');
+          showStatus("Music playing");
+          isPlaying = true;
+        }
+      } catch (error) {
+        showStatus("Audio error");
+        toggleBtn.textContent = "❌";
+      }
+    });
+
+    function showStatus(message) {
+      audioStatus.textContent = message;
+      audioStatus.classList.add('show');
+      setTimeout(() => audioStatus.classList.remove('show'), 5000);
+    }
+
+    const themeToggle = document.getElementById("themeToggle");
+    if (localStorage.getItem("theme") === "light") {
+      document.body.classList.add("light-mode");
+      themeToggle.textContent = "🌚";
+    }
+
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("light-mode");
+      if (document.body.classList.contains("light-mode")) {
+        localStorage.setItem("theme", "light");
+        themeToggle.textContent = "🌚";
+      } else {
+        localStorage.setItem("theme", "dark");
+        themeToggle.textContent = "🌞";
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('fade-in');
+    });
+
+    // Typewriter effect
+    const typeEl = document.getElementById("typewriter");
+const text = "Ptrmldaa";
+let index = 0;
+let isDeleting = false;
+
+function typeLoop() {
+  if (!isDeleting) {
+    typeEl.textContent = text.substring(0, index + 1);
+    index++;
+    if (index === text.length) {
+      setTimeout(() => { isDeleting = true; typeLoop(); }, 5000); // pause before deleting
+      return;
+    }
+  } else {
+    typeEl.textContent = text.substring(0, index - 1);
+    index--;
+    if (index === 0) {
+      isDeleting = false;
+    }
+  }
+  setTimeout(typeLoop, isDeleting ? 80 : 120);
+}
+
+typeLoop();
+  </script>
+</body>
+</html>
